@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crop Disease Detection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-100 font-sans">
+
+  <!-- LOGIN PAGE -->
+  <section id="login-page" class="h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1602524206775-fdb37c65b9d5?auto=format&fit=crop&w=1350&q=80');">
+    <form id="login-form" class="bg-white bg-opacity-90 p-8 rounded-lg shadow-md max-w-sm w-full">
+      <h2 class="text-2xl font-bold mb-6 text-green-700 text-center">Login</h2>
+      <input type="email" id="email" placeholder="Enter your email" required class="p-3 border rounded w-full mb-4" />
+      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Continue</button>
+    </form>
+  </section>
+
+  <!-- DISEASE PAGE -->
+  <section id="disease-page" class="hidden p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 id="welcome" class="text-2xl font-semibold text-green-800">Welcome</h1>
+      <a href="upload.html" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Upload Image</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="disease-container"></div>
+  </section>
+
+  <script>
+    const diseases = [
+      {
+        name: "Powdery Mildew",
+        medicine: "Sulfur fungicide",
+        environment: "Dry air",
+        image: "images/powdery_mildew.jpg"
+      },
+      {
+        name: "Late Blight",
+        medicine: "Copper spray",
+        environment: "Wet & cool",
+        image: "images/late_blight.jpg"
+      },
+      {
+        name: "Leaf Rust",
+        medicine: "Fungicide with chlorothalonil",
+        environment: "Warm & humid",
+        image: "images/leaf_rust.jpg"
+      },
+      {
+        name: "Bacterial Spot",
+        medicine: "Copper-based antibiotic",
+        environment: "Wet soil, high humidity",
+        image: "images/bacterial_spot.jpg"
+      },
+      {
+        name: "Downy Mildew",
+        medicine: "Fosetyl-Al fungicide",
+        environment: "Cool, moist",
+        image: "images/downy_mildew.jpg"
+      }
+    ];
+
+    const loginForm = document.getElementById("login-form");
+    const loginPage = document.getElementById("login-page");
+    const diseasePage = document.getElementById("disease-page");
+    const welcome = document.getElementById("welcome");
+    const diseaseContainer = document.getElementById("disease-container");
+
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      if (!email) return;
+      welcome.textContent = `Welcome, ${email}`;
+      loginPage.classList.add("hidden");
+      diseasePage.classList.remove("hidden");
+
+      diseaseContainer.innerHTML = "";
+      diseases.forEach(disease => {
+        const card = `
+          <div class="bg-white rounded shadow-md overflow-hidden">
+            <img src="${disease.image}" alt="${disease.name}" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="text-lg font-bold text-green-700">${disease.name}</h3>
+              <p><strong>Medicine:</strong> ${disease.medicine}</p>
+              <p><strong>Environment:</strong> ${disease.environment}</p>
+            </div>
+          </div>
+        `;
+        diseaseContainer.innerHTML += card;
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crop Disease Detection</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #eef2f3, #cfd9df);
+      color: #333;
+    }
+
+header {
+  background-color: #031e2d;
+  color: #fff;
+  height: 150px; /* Set a minimum height */
+  padding: 25px 10px; /* Additional padding */
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #f50014;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: #fff;
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    nav button:hover {
+      background-color: #d35400;
+    }
+
+    .section {
+      display: none;
+      padding: 30px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .active {
+      display: block;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2, h3 {
+      font-family: 'Playfair Display', serif;
+      color: #2c3e50;
+    }
+
+    h2 { font-size: 28px; margin-bottom: 10px; }
+    h3 { font-size: 22px; margin-top: 10px; }
+
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .login-form {
+      background: #a34040;
+      padding: 25px;
+      max-width: 450px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .login-form button {
+      background-color: #344955;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .disease-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .disease-card img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .upload-section {
+      text-align: center;
+      padding: 40px;
+      background-color: #fff3e0;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    #crop-image-upload {
+      display: none;
+    }
+
+    .upload-button,
+    .analyze-button {
+      background-color: #344955;
+      color: #fff;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+
+    .upload-button:hover,
+    .analyze-button:hover {
+      background-color: #232f3e;
+    }
+
+    .section-title {
+      font-size: 30px;
+      color: #344955;
+      margin-bottom: 20px;
+    }
+
+    .highlight {
+      color: #f57c00;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>🌿 Empowering Farmers with Cutting-Edge Crop Health Solutions🌿</header>
+
+<nav>
+  <button onclick="showSection('login')">Login</button>
+  <button onclick="showSection('diseases')">Crop Diseases</button>
+  <button onclick="showSection('upload')">Upload Image</button>
+</nav>
+
+ <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f9f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .section {
+      display: none;
+      max-width: 450px;
+      background: #fff;
+      padding: 30px 25px;
+      margin: 60px auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .upload-button, .analyze-button {
+      margin-top: 15px;
+    }
+
+    .upload-section {
+      margin-top: 15px;
+    }
+
+    #crop-image-upload {
+      display: none;
+    }
+
+    p {
+      font-size: 15px;
+      color: #333;
+    }
+  </style>
+
+
+
+  <!-- Login Section -->
+  <div id="login" class="section active">
+    <h2>🔐 Login</h2>
+    <input type="email" id="email" placeholder="Enter your email" />
+    <input type="password" id="password" placeholder="Enter your password" />
+    <button onclick="login()">Login</button>
+  </div>
+
+</div>
+
+<!-- Diseases Section -->
+<div id="diseases" class="section">
+  <h2>Common Crop Diseases</h2>
+
+  <div class="disease-card">
+    <img src="apple_plant_disease.jpg" alt="Apple Scab">
+    <div>
+      <h3>Apple Scab</h3>
+      <p><strong>Symptoms:</strong> Dark, velvety spots on leaves and fruits.</p>
+      <p><strong>Medicine:</strong> Mancozeb or Captan.</p>
+      <p><strong>Favourable Environment:</strong> Wet, cool spring weather.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="bacterial citrus disease.jpg" alt="Citrus Canker">
+    <div>
+      <h3>Citrus Canker</h3>
+      <p><strong>Symptoms:</strong> Raised brown lesions on leaves and fruit with yellow halos.</p>
+      <p><strong>Medicine:</strong> Copper-based bactericides.</p>
+      <p><strong>Favourable Environment:</strong> Warm, wet, and windy conditions.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="bell_pepper_beacteria.jpg" alt="Bacterial Leaf Spot">
+    <div>
+      <h3>Bacterial Leaf Spot (Bell Pepper)</h3>
+      <p><strong>Symptoms:</strong> Small, water-soaked, dark lesions on leaves and fruits.</p>
+      <p><strong>Medicine:</strong> Copper fungicides and streptomycin.</p>
+      <p><strong>Favourable Environment:</strong> Warm, wet, and humid conditions.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="Brownrust.jpg" alt="Brown Rust of Wheat">
+    <div>
+      <h3>Brown Rust (Wheat)</h3>
+      <p><strong>Symptoms:</strong> Small, round, brown pustules on leaf surfaces.</p>
+      <p><strong>Medicine:</strong> Propiconazole or Tebuconazole fungicides.</p>
+      <p><strong>Favourable Environment:</strong> Moist conditions and moderate temperatures.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="corn_disease.jpg" alt="Northern Corn Leaf Blight">
+    <div>
+      <h3>Northern Corn Leaf Blight</h3>
+      <p><strong>Symptoms:</strong> Long, elliptical grayish-green lesions on lower leaves.</p>
+      <p><strong>Medicine:</strong> Fungicides like Azoxystrobin or Mancozeb.</p>
+      <p><strong>Favourable Environment:</strong> Cool temperatures with high humidity.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="flace smut.jpg" alt="False Smut">
+    <div>
+      <h3>False Smut (Rice)</h3>
+      <p><strong>Symptoms:</strong> Green spore balls turning black on rice grains.</p>
+      <p><strong>Medicine:</strong> Carbendazim or Propiconazole.</p>
+      <p><strong>Favourable Environment:</strong> High nitrogen levels and humid conditions.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="mango anthrocnose.jpg" alt="Anthracnose of Mango">
+    <div>
+      <h3>Anthracnose (Mango)</h3>
+      <p><strong>Symptoms:</strong> Dark, sunken spots on leaves, stems, and fruit.</p>
+      <p><strong>Medicine:</strong> Copper oxychloride or Carbendazim sprays.</p>
+      <p><strong>Favourable Environment:</strong> Warm and wet weather.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="Phytophthora blight.jpg" alt="Phytophthora Blight">
+    <div>
+      <h3>Phytophthora Blight</h3>
+      <p><strong>Symptoms:</strong> White moldy growth on fruit, stem cankers, and fruit rot.</p>
+      <p><strong>Medicine:</strong> Metalaxyl or Mancozeb.</p>
+      <p><strong>Favourable Environment:</strong> Excessive moisture and poor drainage.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="ripe fruit rot in chilli.png" alt="Ripe Fruit Rot">
+    <div>
+      <h3>Ripe Fruit Rot (Chilli)</h3>
+      <p><strong>Symptoms:</strong> Sunken, dark lesions on mature fruits with fungal growth.</p>
+      <p><strong>Medicine:</strong> Carbendazim or Hexaconazole.</p>
+      <p><strong>Favourable Environment:</strong> Warm, humid conditions during fruiting stage.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="purple blotch of onion.jpg" alt="Purple Blotch of Onion">
+    <div>
+      <h3>Purple Blotch (Onion)</h3>
+      <p><strong>Symptoms:</strong> Oval, sunken purple spots on leaves with yellow margins.</p>
+      <p><strong>Medicine:</strong> Mancozeb or Iprodione.</p>
+      <p><strong>Favourable Environment:</strong> Warm and humid conditions with poor air circulation.</p>
+    </div>
+  </div>
+
+  <div class="disease-card">
+    <img src="white blister disease in broccoli.png" alt="White Blister">
+    <div>
+      <h3>White Blister (Broccoli)</h3>
+      <p><strong>Symptoms:</strong> White, blister-like pustules on leaves and pods; deformed heads.</p>
+      <p><strong>Medicine:</strong> Metalaxyl or Mancozeb; use disease-free seeds.</p>
+      <p><strong>Favourable Environment:</strong> Cool, moist conditions with frequent fog or irrigation.</p>
+    </div>
+  </div>
+
+</div>
+
+ <!-- Upload Section -->
+  <div id="upload" class="section">
+    <h2 class="section-title">🌾 Upload Crop Image for Detection</h2>
+    <div class="upload-section">
+      <p>Select an image of your crop to detect potential diseases.</p>
+      <input type="file" id="crop-image-upload" accept="image/*" style="display:none;" />
+      <button class="upload-button" onclick="document.getElementById('crop-image-upload').click()">📷 Choose Image</button>
+      <br />
+      <button class="analyze-button">🔍 Analyze Image</button>
+      <br /><br />
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+
+<!-- JavaScript -->
+  <script>
+
+    function showSection(sectionId) {
+  // Hide all sections
+  const sections = document.querySelectorAll('.section');
+  sections.forEach((section) => {
+    section.classList.remove('active');
+  });
+
+  // Show the selected section
+  const activeSection = document.getElementById(sectionId);
+  if (activeSection) {
+    activeSection.classList.add('active');
+  }
+ }
+
+    function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  const validEmail = "admin";
+  const validPassword = "password";
+
+  if (email === validEmail && password === validPassword) {
+    alert("Login successful!");
+
+    // Hide login and show upload
+    document.getElementById("login").classList.remove("active");
+    document.getElementById("upload").classList.add("active");
+  } else {
+    alert("Invalid email or password.");
+  }
+}
+
+    function logout() {
+      document.getElementById("upload").classList.remove("active");
+      document.getElementById("login").classList.add("active");
+
+      // Optional: Clear input fields
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
+    }
+  </script>
+
+</body>
+</html>
